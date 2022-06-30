@@ -8,6 +8,9 @@ CREATE TABLE `productos` (
   `invPrdPadre` bigint(13) DEFAULT NULL,
   `invPrdFactor` int(11) DEFAULT NULL,
   `invPrdVnd` char(3) DEFAULT NULL,
+  `invPrdPrice` decimal(10,2) DEFAULT NULL,
+  `invPrdImg` varchar(256) DEFAULT NULL,
+
   PRIMARY KEY (`invPrdId`),
   UNIQUE KEY `invPrdBrCod_UNIQUE` (`invPrdBrCod`),
   UNIQUE KEY `invPrdCodIng_UNIQUE` (`invPrdCodInt`)

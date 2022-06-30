@@ -50,6 +50,39 @@ class Productos extends Table
         $sqlstr = "Select * from productos;";
         return self::obtenerRegistros($sqlstr, array());
     }
+
+    public static function getAllByFilter($description, $minprice, $maxprice)
+    {
+        $sqlstr = "select * from productos ";   
+        $description = strtolower($description);
+
+        if ($description != "" || $minprice != "" || $maxprice != "") {
+            $sqlstr .="WHERE ";
+        }
+
+        if ($description != ""){
+            $sqlstr .= "lower(invPrdDsc) like '$description%'";
+            if ($minprice != "" || $maxprice != "") {
+                $sqlstr .= " and ";
+            }
+        }
+  
+        if ($minprice != ""){
+            $sqlstr .= "invPrdPrice >= $minprice ";
+            if ($maxprice != "") {
+                $sqlstr .= " and ";
+            }
+        }
+
+        if ($maxprice != ""){
+            $sqlstr .= "invPrdPrice <= $maxprice ";
+        }
+
+        $sqlstr .= ";";
+
+        return self::obtenerRegistros($sqlstr, array());
+    }
+
     /**
      * Get Producto By Id
      *
@@ -86,16 +119,18 @@ class Productos extends Table
         $invPrdEst,
         $invPrdPadre,
         $invPrdFactor,
-        $invPrdVnd
+        $invPrdVnd,
+        $invPrdPrice,
+        $invPrdImg
     ) {
         $sqlstr = "INSERT INTO `productos`
 (`invPrdBrCod`, `invPrdCodInt`,
 `invPrdDsc`, `invPrdTip`, `invPrdEst`,
-`invPrdPadre`, `invPrdFactor`, `invPrdVnd`)
+`invPrdPadre`, `invPrdFactor`, `invPrdVnd`, `invPrdPrice`, `invPrdImg`)
 VALUES
 (:invPrdBrCod, :invPrdCodInt,
 :invPrdDsc, :invPrdTip, :invPrdEst,
-:invPrdPadre, :invPrdFactor, :invPrdVnd);
+:invPrdPadre, :invPrdFactor, :invPrdVnd, :invPrdPrice, :invPrdImg);
 ";
         $sqlParams = [
             "invPrdBrCod" => $invPrdBrCod ,
@@ -105,7 +140,9 @@ VALUES
             "invPrdEst" => $invPrdEst ,
             "invPrdPadre" => $invPrdPadre ,
             "invPrdFactor" =>  $invPrdFactor ,
-            "invPrdVnd" => $invPrdVnd
+            "invPrdVnd" => $invPrdVnd ,
+            "invPrdPrice" => $invPrdPrice ,
+            "invPrdImg" => $invPrdImg
         ];
         return self::executeNonQuery($sqlstr, $sqlParams);
     }
@@ -133,24 +170,27 @@ VALUES
         $invPrdPadre,
         $invPrdFactor,
         $invPrdVnd,
+        $invPrdPrice,
+        $invPrdImg,
         $invPrdId
     ) {
         $sqlstr = "UPDATE `productos` set
 `invPrdBrCod`=:invPrdBrCod, `invPrdCodInt`=:invPrdCodInt,
 `invPrdDsc`=:invPrdDsc, `invPrdTip`=:invPrdTip, `invPrdEst`=:invPrdEst,
-`invPrdPadre`=:invPrdPadre, `invPrdFactor`=:invPrdFactor, `invPrdVnd`=:invPrdVnd
- where `invPrdId` = :invPrdId;";
-        $sqlParams = array(
-            "invPrdBrCod" => $invPrdBrCod,
-            "invPrdCodInt" => $invPrdCodInt,
-            "invPrdDsc" => $invPrdDsc,
-            "invPrdTip" => $invPrdTip,
-            "invPrdEst" => $invPrdEst,
-            "invPrdPadre" => $invPrdPadre,
-            "invPrdFactor" => $invPrdFactor,
+`invPrdPadre`=:invPrdPadre, `invPrdFactor`=:invPrdFactor, `invPrdVnd`=:invPrdVnd, `invPrdPrice`=:invPrdPrice, `invPrdImg`=:invPrdImg where `invPrdId` = :invPrdId;";
+        $sqlParams = [
+            "invPrdBrCod" => $invPrdBrCod ,
+            "invPrdCodInt" => $invPrdCodInt ,
+            "invPrdDsc" => $invPrdDsc ,
+            "invPrdTip" => $invPrdTip ,
+            "invPrdEst" => $invPrdEst ,
+            "invPrdPadre" => $invPrdPadre ,
+            "invPrdFactor" =>  $invPrdFactor ,
             "invPrdVnd" => $invPrdVnd,
+            "invPrdPrice" => $invPrdPrice,
+            "invPrdImg" => $invPrdImg,
             "invPrdId" => $invPrdId
-        );
+        ];
         return self::executeNonQuery($sqlstr, $sqlParams);
     }
 

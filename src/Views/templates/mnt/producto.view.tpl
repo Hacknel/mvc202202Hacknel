@@ -32,6 +32,15 @@
       {{endif error_invPrdDsc}}
     </fieldset>
     <fieldset>
+      <label for="invPrdPrice">Precio Producto</label>
+      <input {{if readonly}}readonly{{endif readonly}} type="number" id="invPrdPrice" name="invPrdPrice" placeholder="Precio" value="{{invPrdPrice}}" />
+      {{if error_invPrdPrice}}
+          {{foreach error_invPrdPrice}}
+            <div class="error">{{this}}</div>
+          {{endfor error_invPrdPrice}}
+      {{endif error_invPrdPrice}}
+    </fieldset>
+    <fieldset>
       <label for="invPrdTip">Tipo de Producto</label>
       <select name="invPrdTip" id="invPrdTip" {{if readonly}}readonly disabled{{endif readonly}}>
         {{foreach invPrdTipArr}}
@@ -54,6 +63,18 @@
         <option value="{{value}}" {{selected}}>{{text}}</option>
         {{endfor invPrdVndArr}}
       </select>
+    </fieldset>
+    <fieldset>
+      <label for="inv">URL Imágen Producto</label>
+      <input {{if readonly}}readonly{{endif readonly}} type="text" id="invPrdImg" name="invPrdImg" placeholder="URL" value="{{invPrdImg}}" />
+      {{if error_invPrdImg}}
+          {{foreach error_invPrdImg}}
+            <div class="error">{{this}}</div>
+          {{endfor error_invPrdImg}}
+      {{endif error_invPrdImg}}
+    </fieldset>
+    <fieldset>
+      <img src="{{invPrdImg}}" width="200px" alt="No ha agreado el recurso">
     </fieldset>
     <fieldset>
       {{if showBtn}}

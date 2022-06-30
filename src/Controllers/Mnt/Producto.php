@@ -78,6 +78,10 @@ class Producto extends PublicController
         $this->viewData["invPrdEstArr"] = array();
         $this->viewData["invPrdVnd"] = "";
         $this->viewData["invPrdVndArr"] = array();
+        $this->viewData["invPrdPrice"] = "";
+        $this->viewData["error_invPrdPrice"] = array();
+        $this->viewData["invPrdImg"] = "";
+        $this->viewData["error_invPrdImg"] = array();
         $this->viewData["btnEnviarText"] = "Guardar";
         $this->viewData["readonly"] = false;
         $this->viewData["showBtn"] = true;
@@ -167,6 +171,16 @@ class Producto extends PublicController
                 = "La descripción es requerida";
             $hasErrors = true;
         }
+        if (Validators::IsEmpty($this->viewData["invPrdPrice"])) {
+            $this->viewData["error_invPrdPrice"][]
+                = "El precio es requerido.";
+            $hasErrors = true;
+        }
+        if (Validators::IsEmpty($this->viewData["invPrdImg"])) {
+            $this->viewData["error_invPrdImg"][]
+                = "La URL de imágen es requerida.";
+            $hasErrors = true;
+        }
         error_log(json_encode($this->viewData));
         // Ahora procedemos con las modificaciones al registro
         if (!$hasErrors) {
@@ -181,7 +195,9 @@ class Producto extends PublicController
                     $this->viewData["invPrdEst"],
                     null,
                     1,
-                    $this->viewData["invPrdVnd"]
+                    $this->viewData["invPrdVnd"],
+                    $this->viewData["invPrdPrice"],
+                    $this->viewData["invPrdImg"]
                 );
                 if ($result) {
                         \Utilities\Site::redirectToWithMsg(
@@ -200,6 +216,8 @@ class Producto extends PublicController
                     null,
                     1,
                     $this->viewData["invPrdVnd"],
+                    $this->viewData["invPrdPrice"],
+                    $this->viewData["invPrdImg"],
                     intval($this->viewData["invPrdId"])
                 );
                 if ($result) {
