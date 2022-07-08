@@ -9,6 +9,7 @@ use Exception;
 class Register extends PublicController
 {
     private $txtEmail = "";
+    private $txtUsername = "";
     private $txtPswd = "";
     private $errorEmail ="";
     private $errorPswd = "";
@@ -18,10 +19,15 @@ class Register extends PublicController
 
         if ($this->isPostBack()) {
             $this->txtEmail = $_POST["txtEmail"];
+            $this->txtUsername = $_POST["txtUsername"];
             $this->txtPswd = $_POST["txtPswd"];
             //validaciones
             if (!(Validators::IsValidEmail($this->txtEmail))) {
                 $this->errorEmail = "El correo no tiene el formato adecuado";
+                $this->hasErrors = true;
+            }
+            if ((Validators::IsEmpty($this->txtUsername))) {
+                $this->txtUsername = "El nombre de usuario es requerido";
                 $this->hasErrors = true;
             }
             if (!Validators::IsValidPassword($this->txtPswd)) {
@@ -31,7 +37,7 @@ class Register extends PublicController
             
             if (!$this->hasErrors) {
                 try{
-                    if (\Dao\Security\Security::newUsuario($this->txtEmail, $this->txtPswd)) {
+                    if (\Dao\Security\Security::newUsuario($this->txtEmail, $this->txtUsername, $this->txtPswd)) {
                         \Utilities\Site::redirectToWithMsg("index.php?page=sec_login", "¡Usuario Registrado Satisfactoriamente!");
                     }
                 } catch (Error $ex){

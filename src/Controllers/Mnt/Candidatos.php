@@ -16,11 +16,11 @@
       // Sección de imports
       // ---------------------------------------------------------------
       use Controllers\PublicController;
-      use Dao\Security\Security as DaoSecurity;
+      use Dao\Mnt\Candidatos as DaoCandidatos;
       use Views\Renderer;
       
       /**
-       * Usuarios
+       * Candidatos
        *
        * @category Public
        * @package  Controllers\Mnt;
@@ -28,7 +28,7 @@
        * @license  MIT http://
        * @link     http://
        */
-      class Usuarios extends PublicController
+      class Candidatos extends PublicController
       {
           /**
            * Runs the controller
@@ -39,10 +39,10 @@
           {
               // code
               $viewData = array();
-              $viewData["Usuarios"] = DaoSecurity::getUsuarios();
+              $viewData["Candidatos"] = DaoCandidatos::getAll();
               error_log(json_encode($viewData));
             
-              Renderer::render("mnt/Usuarios", $viewData);
+              Renderer::render("mnt/Candidatos", $viewData);
           }
       }
       

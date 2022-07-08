@@ -47,7 +47,7 @@ class Security extends \Dao\Table
         return self::obtenerRegistros($sqlstr, array());
     }
 
-    static public function newUsuario($email, $password)
+    static public function newUsuario($email, $username, $password)
     {
         if (!\Utilities\Validators::IsValidEmail($email)) {
             throw new Exception("Correo no es válido");
@@ -65,7 +65,7 @@ class Security extends \Dao\Table
         unset($newUser["userpswdchg"]);
 
         $newUser["useremail"] = $email;
-        $newUser["username"] = "John Doe";
+        $newUser["username"] = $username;
         $newUser["userpswd"] = $hashedPassword;
         $newUser["userpswdest"] = Estados::ACTIVO;
         $newUser["userpswdexp"] = date('Y-m-d', time() + 7776000);  //(3*30*24*60*60) (m d h mi s)
@@ -85,10 +85,57 @@ class Security extends \Dao\Table
 
     }
 
+    static public function updateUsuario($email, $username, $password, $userest, $usertype)
+    {
+
+        $updUser = self::_usuarioStruct();
+        //Tratamiento de la Contraseña
+        $hashedPassword = self::_hashPassword($password);
+
+        unset($updUser["usercod"]);
+        unset($updUser["userfching"]);
+        unset($updUser["userpswdchg"]);
+
+        $updUser["useremail"] = $email;
+        $updUser["username"] = $username;
+        $updUser["userpswd"] = $hashedPassword;
+        $updUser["userpswdest"] = $userest;
+        $updUser["userpswdexp"] = date('Y-m-d', time() + 7776000);  //(3*30*24*60*60) (m d h mi s)
+        $updUser["userest"] = $userest;
+        $updUser["useractcod"] = hash("sha256", $email.time());
+        $updUser["usertipo"] = $usertype;
+
+        $sqlUpd = "UPDATE `usuario` SET `username`=:username, `userpswd`=:userpswd,
+            `userfching`=now(), `userpswdest`=:userpswdest, `userpswdexp`=:userpswdexp, `userest`=:userest, `useractcod`=:useractcod,
+            `userpswdchg`=now(), `usertipo`=:usertipo
+            WHERE `useremail`=:useremail;";
+
+        return self::executeNonQuery($sqlUpd, $updUser);
+
+    }
+
+    static public function deleteUsuario($email)
+    {
+        $sqlstr = "DELETE from `usuario` WHERE `useremail`=:useremail;";
+              $sqlParams = array(
+                  "useremail" => $email
+              );
+              return self::executeNonQuery($sqlstr, $sqlParams);
+
+    }
+
     static public function getUsuarioByEmail($email)
     {
         $sqlstr = "SELECT * from `usuario` where `useremail` = :useremail ;";
         $params = array("useremail"=>$email);
+
+        return self::obtenerUnRegistro($sqlstr, $params);
+    }
+
+    static public function getUsuarioById($usercod)
+    {
+        $sqlstr = "SELECT * from `usuario` where `usercod` = :usercod ;";
+        $params = array("usercod"=>$usercod);
 
         return self::obtenerUnRegistro($sqlstr, $params);
     }

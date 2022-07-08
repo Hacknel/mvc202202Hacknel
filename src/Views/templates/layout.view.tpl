@@ -34,6 +34,9 @@
           <li><a href="index.php?page=Mnt_Productos"><i class="fas fa-user-plus"></i>&nbsp;Productos</a></li>
           <li><a href="index.php?page=Mnt_Scores"><i class="fas fa-user-plus"></i>&nbsp;Scores</a></li>
           <li><a href="index.php?page=Mnt_Catalogo"><i class="fas fa-user-plus"></i>&nbsp;Catálogo</a></li>
+          <li><a href="index.php?page=Mnt_Clientes"><i class="fas fa-user-plus"></i>&nbsp;Clientes</a></li>
+          <li><a href="index.php?page=Mnt_Usuarios"><i class="fas fa-user-plus"></i>&nbsp;Usuarios</a></li>
+          <li><a href="index.php?page=Mnt_Candidatos"><i class="fas fa-user-plus"></i>&nbsp;Usuarios</a></li>
       </ul>
     </nav>
   </header>

@@ -9,7 +9,10 @@
     },
     "scripts" :{
       "docs": "./vendor/phpdocumentor/phpdocumentor/bin/phpdoc -t ./docs/manual_tecnico",
-      "less": "./vendor/bin/lessc --compress ./public/css_src/style.less ./public/css/appstyle.css"
+      "less": "./vendor/bin/lessc --compress ./public/css_src/style.less ./public/css/appstyle.css",
+      "post-install-cmd": [
+        "@php ./docs/scripts/scriptWW.php"
+    ]
       
     }
 }
