@@ -16,14 +16,6 @@
       */
       class Candidatos extends Table
       {
-          /*
-          Tabla a generar:
-          Idcandidato
-Identidad
-Nombre
-Edad
-
-          */
           /**
            * Obtiene todos los registros de Candidatos
            *
@@ -54,22 +46,17 @@ Edad
            */
           public static function insert(
             $Identidad,
-$Nombre,
-$Edad
+            $Nombre,
+            $Edad
           ) {
               $sqlstr = "INSERT INTO `candidatos`
-      (`Identidad`,
-`Nombre`,
-`Edad`)
-      VALUES
-      (:Identidad,
-:Nombre,
-:Edad);
-      ";
+                (`Identidad`, `Nombre`, `Edad`)
+                VALUES
+                (:Identidad, :Nombre, :Edad);";
               $sqlParams = [
-                  "Identidad" => $Identidad,
-"Nombre" => $Nombre,
-"Edad" => $Edad
+                  "Identidad" => $Identidad, 
+                  "Nombre" => $Nombre,
+                  "Edad" => $Edad
               ];
               return self::executeNonQuery($sqlstr, $sqlParams);
           }
@@ -77,27 +64,23 @@ $Edad
            * Updates Candidatos
            */
           public static function update(
-            $Idcandidato,
-$Identidad,
-$Nombre,
-$Edad
+            $Idcandidato, $Identidad, $Nombre, $Edad
           ) {
               $sqlstr = "UPDATE `candidatos` set 
-      `Identidad`=:Identidad,
-`Nombre`=:Nombre,
-`Edad`=:Edad
-      where `Idcandidato` =:Idcandidato;";
+            `Identidad`=:Identidad, 
+            `Nombre`=:Nombre,
+            `Edad`=:Edad
+            where `Idcandidato` =:Idcandidato;";
               $sqlParams = [
                 "Idcandidato" => $Idcandidato,
-"Identidad" => $Identidad,
-"Nombre" => $Nombre,
-"Edad" => $Edad
+                "Identidad" => $Identidad,
+                "Nombre" => $Nombre,
+                "Edad" => $Edad
               ];
               return self::executeNonQuery($sqlstr, $sqlParams);
           }
       
           /**
-           * Undocumented function
            *
            * @param [type] $Idcandidato Codigo del Candidatos
            *

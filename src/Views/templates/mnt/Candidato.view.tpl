@@ -7,7 +7,7 @@
 
     <fieldset>
       <label for="Identidad">Identidad</label>
-      <input {{if readonly}} readonly {{endif readonly}} type="text" minlength="13" maxlength="13" id="Identidad" name="Identidad"
+      <input {{if readonly}} readonly {{endif readonly}} {{if readonlyident}} readonly {{endif readonlyident}} type="text" minlength="13" maxlength="13" id="Identidad" name="Identidad"
         placeholder="Identidad" value="{{Identidad}}" />
       {{if error_Identidad}}
       {{foreach error_Identidad}}
@@ -37,19 +37,6 @@
       {{endfor error_Edad}}
       {{endif error_Edad}}
     </fieldset>
-
-
-
-    <!-- 
-          <fieldset>    Descomentar en caso que la tabla tenga estados
-            <label for="scoreest">Estado</label>
-            <select name="scoreest" id="scoreest" {{if readonly}} readonly disabled {{endif readonly}}>
-              {{foreach scoreestArr}}
-              <option value="{{value}}" {{selected}}>{{text}}</option>
-              {{endfor scoreestArr}}
-            </select>
-          </fieldset> 
-          -->
 
     <fieldset>
       {{if showBtn}}

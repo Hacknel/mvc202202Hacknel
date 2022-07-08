@@ -33,7 +33,6 @@ class Candidato extends PublicController
 {
     private $viewData = array();
     private $arrModeDesc = array();
-    //private $arrEstados = array(); Descomentar en caso que la tabla tenga estados
 
     /**
      * Runs the controller
@@ -42,17 +41,13 @@ class Candidato extends PublicController
      */
     public function run():void
     {
-        // code
         $this->init();
-        // Cuando es método GET (se llama desde la lista)
         if (!$this->isPostBack()) {
             $this->procesarGet();
         }
-        // Cuando es método POST (click en el botón)
         if ($this->isPostBack()) {
             $this->procesarPost();
         }
-        // Ejecutar Siempre
         $this->processView();
         Renderer::render("mnt/Candidato", $this->viewData);
     }
@@ -65,19 +60,17 @@ class Candidato extends PublicController
         $this->viewData["crsf_token"] = "";
         $this->viewData["Idcandidato"] = "";
         $this->viewData["Identidad"] = "";
-$this->viewData["Nombre"] = "";
-$this->viewData["Edad"] = "";
+        $this->viewData["Nombre"] = "";
+        $this->viewData["Edad"] = "";
 
         $this->viewData["error_Identidad"] = array();
-$this->viewData["error_Nombre"] = array();
-$this->viewData["error_Edad"] = array();
+        $this->viewData["error_Nombre"] = array();
+        $this->viewData["error_Edad"] = array();
 
-
-        //$this->viewData["NOMBRE_LLAVE_DEL_ESTADO"] = ""; Descomentar en caso que la tabla tenga estados
-        //$this->viewData["NOMBRE_LLAVE_DEL_ESTADOArr"] = array(); Descomentar en caso que la tabla tenga estados
       
         $this->viewData["btnEnviarText"] = "Guardar";
         $this->viewData["readonly"] = false;
+        $this->viewData["readonlyident"] = false;
         $this->viewData["showBtn"] = true;
 
         $this->arrModeDesc = array(
@@ -86,14 +79,6 @@ $this->viewData["error_Edad"] = array();
             "DSP"=>"Detalle de %s %s",
             "DEL"=>"Eliminado %s %s"
         );
-
-        // $this->arrEstados = array(  Descomentar en caso que la tabla tenga estados
-        //     array("value" => "ACT", "text" => "Activo"),
-        //     array("value" => "INA", "text" => "Inactivo"),
-        // );
-
-        // $this->viewData["NOMBRE_LLAVE_DEL_ESTADOArr"] = $this->arrEstados; Descomentar en caso que la tabla tenga estados
-
     }
 
     private function procesarGet()
@@ -117,8 +102,6 @@ $this->viewData["error_Edad"] = array();
     }
     private function procesarPost()
     {
-        // Validar la entrada de Datos
-        //  Todos valor puede y sera usando en contra del sistema
         $hasErrors = false;
         \Utilities\ArrUtils::mergeArrayTo($_POST, $this->viewData);
         if (isset($_SESSION[$this->name . "crsf_token"])
@@ -131,36 +114,35 @@ $this->viewData["error_Edad"] = array();
         }
 
         if (Validators::IsEmpty($this->viewData["Identidad"])) {
-$this->viewData["error_Identidad"][]
- = "El Identidad es requerido";
-$hasErrors = true;
-}
+            $this->viewData["error_Identidad"][]
+             = "El Identidad es requerido";
+            $hasErrors = true;
+        }
 
-if (Validators::IsEmpty($this->viewData["Nombre"])) {
-$this->viewData["error_Nombre"][]
- = "El Nombre es requerido";
-$hasErrors = true;
-}
+        if (Validators::IsEmpty($this->viewData["Nombre"])) {
+            $this->viewData["error_Nombre"][]
+             = "El Nombre es requerido";
+            $hasErrors = true;
+        }
 
-if (Validators::IsEmpty($this->viewData["Edad"])) {
-$this->viewData["error_Edad"][]
- = "El Edad es requerido";
-$hasErrors = true;
-}
+        if (Validators::IsEmpty($this->viewData["Edad"])) {
+            $this->viewData["error_Edad"][]
+             = "El Edad es requerido";
+            $hasErrors = true;
+        }
 
 
 
         
         error_log(json_encode($this->viewData));
-        // Ahora procedemos con las modificaciones al registro
         if (!$hasErrors) {
             $result = null;
             switch($this->viewData["mode"]) {
             case "INS":
                 $result = Candidatos::insert(
                     $this->viewData["Identidad"],
-$this->viewData["Nombre"],
-$this->viewData["Edad"]
+                    $this->viewData["Nombre"],
+                    $this->viewData["Edad"]
                 );
                 if ($result) {
                         \Utilities\Site::redirectToWithMsg(
@@ -172,9 +154,9 @@ $this->viewData["Edad"]
             case "UPD":
                 $result = Candidatos::update(
                   $this->viewData["Idcandidato"],
-$this->viewData["Identidad"],
-$this->viewData["Nombre"],
-$this->viewData["Edad"]
+                    $this->viewData["Identidad"],
+                    $this->viewData["Nombre"],
+                    $this->viewData["Edad"]
                 );
                 if ($result) {
                     \Utilities\Site::redirectToWithMsg(
@@ -209,14 +191,6 @@ $this->viewData["Edad"]
                 $this->viewData["Idcandidato"],
                 $this->viewData["Identidad"]
             );
-            // $this->viewData["NOMBRE_LLAVE_DEL_ESTADOArr"]  Descomentar en caso que la tabla tenga estados
-            //     = \Utilities\ArrUtils::objectArrToOptionsArray(
-            //         $this->arrEstados,
-            //         "value",
-            //         "text",
-            //         "value",
-            //         $this->viewData["NOMBRE_LLAVE_DEL_ESTADO"]
-            //     );
             
             if ($this->viewData["mode"] === "DSP") {
                 $this->viewData["readonly"] = true;
@@ -228,6 +202,7 @@ $this->viewData["Edad"]
             }
             if ($this->viewData["mode"] === "UPD") {
                 $this->viewData["btnEnviarText"] = "Actualizar";
+                $this->viewData["readonlyident"] = true;
             }
         }
         $this->viewData["crsf_token"] = md5(getdate()[0] . $this->name);
